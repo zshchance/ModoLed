@@ -9,6 +9,8 @@
 #define LED1_POWER_PIN 7  //灯条1的供电控制引脚 置1开启供电
 #define LED2_POWER_PIN 10  //灯条2的供电控制引脚 置1开启供电
 #define LED_DATA_PIN    5  //LED灯条的数据控制引脚 VER1版本设计硬件中两个灯条共享数据引脚
+//开发测试
+#define LED2_DATA_PIN    6  //LED灯条的数据控制引脚 开发版本设计硬件中第2灯条数据引脚
 
 #define TEMPERATURE_PIN A3   //温度传感器AD输入引脚
 #define  TEMPERATURE_EN_PIN  9  //温度传感器取电引脚

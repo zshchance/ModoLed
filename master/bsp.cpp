@@ -1,5 +1,6 @@
 #define EXT extern
 #include "pins.h"
+#include "configuration.h"
 #include "global_var.h"
 
 //ii means:
@@ -25,6 +26,8 @@ void set_pin_mcu_into_sleep(){
     pinMode(i, INPUT);
     digitalWrite(i, LOW);
   }
+  led_work_mode = MODE_STATE_POWER_OFF;
+  mcu_state_wake_up_by = MODE_STATE_POWER_OFF;
   energy.PowerDown(); //Most power saving
 }
 

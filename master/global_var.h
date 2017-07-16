@@ -6,26 +6,48 @@
 #include <avr/wdt.h>
 #include <avr/power.h>
 #include<EEPROM.h>
+#include "configuration.h"
 
-// How many NeoPixels are attached to the Arduino?
-#define NUMPIXELS  30
+#define SIGNAL_IRQ_EC11SW 2
+#define SIGNAL_IRQ_WDT 3
+#define SIGNAL_IRQ_EC11A 4
+#define POWER_STATE_AWAKE 1
+#define MODE_STATE_POWER_OFF 0
+#define MODE_STATE_LIGHTING 1
+#define MODE_STATE_BREATHE 2
+#define MODE_STATE_WATERFALL 3
+
+
+struct led_color{
+   unsigned char r;
+   unsigned char g;
+   unsigned char b;
+   unsigned char w;
+};
+struct key_para{
+   unsigned long edge_down_time;
+   unsigned long edge_up_time;
+   unsigned char key_times;   //记录按键单击、双击、或是其他行为
+};
 
 #ifndef EXT
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_DATA_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels2 = Adafruit_NeoPixel(NUMPIXELS, LED2_DATA_PIN, NEO_RGBW + NEO_KHZ800);
 Energy energy;
-int mcu_state = 1;  //0 sleeping,1 awake,2 EC11_SW irq from sleeping, 
+unsigned char mcu_state_wake_up_by = POWER_STATE_AWAKE;  //0 sleeping,1 awake,2 EC11_SW irq from sleeping, 
                     //3 WDT_ISR irq from sleeping,4 EC11_A irq from sleeping
-unsigned long time_anti_sens = 0; 
-unsigned long time_anti_sw = 0;
+unsigned char led_work_mode = MODE_STATE_POWER_OFF;///0 power off, 1 lighting mode, 2 breathe mode, 3 waterfall mode
+key_para ec11_switch;
 
 #else
 
 EXT Adafruit_NeoPixel pixels ;
+EXT Adafruit_NeoPixel pixels2 ;
 EXT Energy energy;
-EXT int mcu_state; 
-EXT unsigned long time_anti_sens; 
-EXT unsigned long time_anti_sw;
+EXT unsigned char mcu_state_wake_up_by; 
+EXT unsigned char led_work_mode;
+EXT key_para ec11_switch;
 
 #endif  //EXT
 
